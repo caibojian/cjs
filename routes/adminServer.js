@@ -4,6 +4,11 @@ router.caseSensitive = true;
 var url = require('url');
 //数据校验
 var validator = require('validator');
+//数据操作
+var DBopt = require('../models/DBopt');
+//后台管理用户
+var AdminUser = require('../models/AdminUser');
+
 
 /*跳转到到登录页面*/
 router.get("/login", function(req, res, net){
@@ -20,8 +25,17 @@ router.post('/doLogin', function(req, res){
 	var password = req.body.password;
 	if(true){
 		if(validator.isUserName(userName) && validator.isPsd(password)){
-			req.session.adminlogined = true;
-			res.end("success");
+            //验证用户名密码
+            AdminUser.findOne({'userName': userName, 'password': password}).exec(function(err, user){
+                if(err){
+                    res.end(err);
+                }
+                if(user){
+                    req.session.adminlogined = true;
+                    req.session.adminUserInfo = user;
+                    res.end("success");
+                }
+            });
 		}
 	}else{
 		console.log("登录失败");
