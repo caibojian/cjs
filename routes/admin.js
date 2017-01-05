@@ -8,6 +8,8 @@ router.caseSensitive = true;
 var url = require('url');
 //数据校验
 var validator = require('validator');
+//对象管理
+var adminBean = require('./adminBean');
 
 //判断是否登录
 function isAdminLogined(req){
@@ -29,6 +31,17 @@ router.get(["/manage", "/manage/*"], function(req, res, next){
 	}else{
 		res.redirect("/admin/login");
 	}
+});
+
+//通用table数据查询
+router.get('/manage/getDocumentList/:defaultUrl', function(req, res, next){
+	var currentPage = req.params.defaultUrl;
+	console.log(currentPage);
+    if(adminBean.checkAdminPower(req,currentPage + '_view')){
+        next();
+    }else{
+        return res.json({});
+    }
 });
 
 

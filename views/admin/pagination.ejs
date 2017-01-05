@@ -1,0 +1,9 @@
+<div class="am-fr">
+	<ul class="am-pagination tpl-pagination">
+        <li ng-class="{true:'am-disabled'}[currentPage==1]"><a href="javascript:void(0);" ng-click="firstPage()"><i class="fast-backward"></i>|<<</a></li>
+        <li ng-class="{true:'am-disabled'}[currentPage==1]"><a href="javascript:void(0);" ng-click="prevPage()"><i class="fa fa-angle-left"></i><<</a></li>
+        <li ng-repeat="page in pages" ng-class="{true:'am-active'}[currentPage==page]"><a href="javascript:void(0);" ng-click="loadPage(page)">{{ page }}</a></li>
+        <li ng-class="{true:'am-disabled'}[currentPage==totalPage]"><a href="javascript:void(0);" ng-click="nextPage()"><i class="fa fa-angle-right"></i>>></a></li>
+        <li ng-class="{true:'am-disabled'}[currentPage==totalPage]"><a href="javascript:void(0);" ng-click="lastPage()"><i class="fa fa-angle-double-right"></i>>>|</a></li>
+    </ul>
+</div>

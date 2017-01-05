@@ -7,7 +7,6 @@ var Schema = mongoose.Schema;
 //id生成器
 var shortid = require('shortid');
 
-
 var AdminUserSchema = new Schema({
 	_id: {
 		type: String,
