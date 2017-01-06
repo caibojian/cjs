@@ -36,7 +36,6 @@ router.get(["/manage", "/manage/*"], function(req, res, next){
 //通用table数据查询
 router.get('/manage/getDocumentList/:defaultUrl', function(req, res, next){
 	var currentPage = req.params.defaultUrl;
-	console.log(currentPage);
     if(adminBean.checkAdminPower(req,currentPage + '_view')){
         next();
     }else{
@@ -44,7 +43,33 @@ router.get('/manage/getDocumentList/:defaultUrl', function(req, res, next){
     }
 });
 
+//对象新增
+router.post('/manage/:defaultUrl/addOne',function(req,res,next){
 
+    var currentPage = req.params.defaultUrl;
+    if(adminBean.checkAdminPower(req,currentPage + '_add')){
+        next();
+    }else{
+        res.end(settings.system_noPower);
+    }
+});
+
+//通用对象删除
+router.get('/manage/:defaultUrl/del',function(req,res,next){
+    var currentPage = req.params.defaultUrl;
+    var params = url.parse(req.url,true);
+    var targetId = params.query.uid;
+    if(adminBean.checkAdminPower(req,currentPage + '_del')){
+        if(shortid.isValid(targetId)){
+            next();
+        }else{
+            res.end(settings.system_illegal_param);
+        }
+
+    }else{
+        res.end(settings.system_noPower);
+    }
+});
 
 //自定义校验扩展
 validator.extend('isUserName', function (str) {

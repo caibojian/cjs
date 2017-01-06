@@ -101,3 +101,88 @@ function getPageInfos($scope,$http,url,reqType){
     })
 }
 
+//angularJs https Post方法封装
+function angularHttpPost($http,isValid,url,formData,callBack){
+    //if(isValid){
+    if(true){
+        $http({
+            method  : 'POST',
+            url     : url,
+            data    : $.param(formData),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
+        })
+        .success(function(data) {
+            //  关闭所有模态窗口
+            // $('.modal').each(function(i){
+            //     $(this).modal("hide");
+            // });
+
+            if(data == 'success'){
+                callBack(data);
+            }else{
+                //$.tipsShow({ message : data, type : 'warning' });
+            }
+        });
+    }
+    else{
+        //$.tipsShow({ message : "参数校验不通过", type : 'warning' });
+    }
+}
+//主要针对删除操作
+function angularHttpGet($http,url,callBack){
+    $http.get(url).success(function(result){
+        $('.modal').each(function(i){
+            $(this).modal("hide");
+        });
+        if(result == 'success'){
+            callBack(result);
+        }else{
+            //$.tipsShow({ message : result, type : 'warning' });
+        }
+    })
+}
+
+
+//获取添加或修改链接
+function getTargetPostUrl($scope,bigCategory){
+    var url = "/admin/manage/"+bigCategory+"/addOne";
+    if($scope.targetID){
+        url = "/admin/manage/"+bigCategory+"/modify?uid="+$scope.targetID;
+    }
+    return url;
+}
+
+
+//初始化删除操作
+function initDelOption($scope,$http,info){
+
+    // 单条记录删除
+    $scope.delOneItem = function(id){
+        // initCheckIfDo($scope,id,info,function(currentID){
+            angularHttpGet($http,"/admin/manage/"+$('#currentCate').val()+"/del?uid="+id,function(){
+                initPagination($scope,$http);
+            });
+        // });
+    };
+
+    $scope.getNewIds = function(){
+        getSelectIds();
+    };
+
+    // 批量删除
+    $scope.batchDel = function(){
+        var targetIds = $('#targetIds').val();
+        if(targetIds && targetIds.split(',').length > 0){
+            initCheckIfDo($scope,$('#targetIds').val(),info,function(currentID){
+                angularHttpGet($http,"/admin/manage/"+$('#currentCate').val()+"/batchDel?ids="+currentID+"&expandIds="+$('#expandIds').val(),function(){
+                    initPagination($scope,$http);
+                });
+            });
+        }else{
+            alert('请至少选择一项')
+        }
+    }
+
+}
+
+

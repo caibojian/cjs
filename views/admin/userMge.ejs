@@ -4,8 +4,6 @@
 		<div class="widget am-cf">
 			<div class="widget-head am-cf">
 				<div class="widget-title  am-cf">用户列表</div>
-
-
 			</div>
 			<div class="widget-body  am-fr">
 
@@ -13,7 +11,7 @@
 					<div class="am-form-group">
 						<div class="am-btn-toolbar">
 							<div class="am-btn-group am-btn-group-xs">
-								<button type="button" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</button>
+								<a href="#addNewAdminUser" data-am-modal="{target: '#addNewAdminUser', dimmer:0,closeViaDimmer: 0, width: 800}" type="button" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</a>
 								<button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 保存</button>
 								<button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span> 审核</button>
 								<button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除</button>
@@ -67,7 +65,7 @@
 										<a href="javascript:;">
 											<i class="am-icon-pencil"></i> 编辑
 										</a>
-										<a href="javascript:;" class="tpl-table-black-operation-del">
+										<a href="javascript:;" class="tpl-table-black-operation-del" ng-click="delOneItem(user._id)">
 											<i class="am-icon-trash"></i> 删除
 										</a>
 									</div>
@@ -82,5 +80,87 @@
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<!--添加新用户模态窗口-->
+    <div class="am-modal" tabindex="-1" id="addNewAdminUser">
+	  <div class="am-modal-dialog">
+        <div class="widget am-cf">
+            <div class="widget-head am-cf">
+                <div class="widget-title am-fl">用户信息</div>
+                <div class="widget-function am-fr">
+                    <a href="javascript:;" class="am-icon-cog"></a>
+                </div>
+            </div>
+            <div class="widget-body am-fr">
+                <form class="am-form tpl-form-border-form tpl-form-border-br" name="myForm" ng-submit="processForm(myForm.$valid)">
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">用户名<span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" class="tpl-form-input" name="userName" ng-model="formData.userName" placeholder="请输入用户名">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-phone" class="am-u-sm-3 am-form-label">用户组<span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <select data-am-selected="{searchBox: 1}" style="display: none;">
+							<option value="a">-The.CC</option>
+							<option value="b">夕风色事实上事实上所所所所所所所</option>
+							<option value="o">Orange</option>
+							</select>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">姓名 <span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" placeholder="输入姓名" name="name" ng-minlength="2" ng-maxlength="6" ng-pattern="/[\u4e00-\u9fa5]/" ng-model="formData.name" required>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">密码 <span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" placeholder="输入密码" id="userPassword" name="password" ng-pattern="/(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{5,}/" ng-maxlength="12" ng-model="formData.password" required>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">Email <span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" placeholder="输入Email" name="email" ng-model="formData.email" ng-pattern="/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/" required>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">电话 <span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" placeholder="输入电话" name="phoneNum" ng-model="formData.phoneNum" ng-pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57])[0-9]{8}$/" required>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-intro" class="am-u-sm-3 am-form-label">账号冻结</label>
+                        <div class="am-u-sm-9">
+                            <div class="tpl-switch">
+                                <input type="checkbox" class="ios-switch bigswitch tpl-switch-btn" checked="">
+                                <div class="tpl-switch-btn-view">
+                                    <div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success " >提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+	    </div>
+	  </div>
 	</div>
 </div>
