@@ -12,6 +12,8 @@ var adminBean = require('./adminBean');
 var DBOpt = require('../models/DBOpt');
 //后台管理用户
 var AdminUser = require('../models/AdminUser');
+//后台管理用户组
+var AdminGroup = require("../models/AdminGroup");
 
 /*跳转到到登录页面*/
 router.get("/login", function(req, res, net){
@@ -24,6 +26,10 @@ router.get('/manage', function(req, res) {
 //人员管理界面
 router.get('/manage/userMge', function(req, res) {
     res.render('admin/userMge', setPageInfo(req,res,settings.adminUsersList));
+});
+//用户组管理界面
+router.get('/manage/groupMge', function(req, res) {
+    res.render('admin/groupMge', setPageInfo(req,res,settings.adminGroupList));
 });
 
 /*处理登录请求*/
@@ -61,6 +67,26 @@ router.get('/logout', function(req, res) {
     res.redirect("/admin");
 });
 
+//-------------------------获取单个对象数据开始-------------------------
+router.get('/manage/:defaultUrl/item',function(req,res){
+    var currentPage = req.params.defaultUrl;
+    var targetObj = adminBean.getTargetObj(currentPage);
+    var params = url.parse(req.url,true);
+    var targetId = params.query.uid;
+
+    if(targetObj == AdminUser){
+        AdminUser.getOneItem(res,targetId,function(user){
+            return res.json(user);
+        });
+    }else{
+        DBOpt.findOne(targetObj,req, res,"find one obj success");
+    }
+
+});
+
+//-------------------------获取单个对象数据结束-------------------------
+
+
 //-------------------------对象列表查询开始(带分页)-------------------------------
 
 router.get('/manage/getDocumentList/:defaultUrl',function(req,res){
@@ -82,25 +108,22 @@ router.get('/manage/getDocumentList/:defaultUrl',function(req,res){
 router.get('/manage/:defaultUrl/del',function(req,res){
     var currentPage = req.params.defaultUrl;
     var params = url.parse(req.url,true);
-    var targetObj = adminFunc.getTargetObj(currentPage);
+    var targetObj = adminBean.getTargetObj(currentPage);
 
-    if(targetObj == Message){
-        removeMessage(req,res)
-    }else if(targetObj == AdminUser){
+    if(targetObj == AdminUser){
         if(params.query.uid == req.session.adminUserInfo._id){
             res.end('不能删除当前登录的管理员！');
         }else{
-            Message.find({'adminAuthor' : params.query.uid},function(err,docs){
-                if(err){
-                    res.end(err)
-                }
-                if(docs && docs.length>0){
-                    res.end('请清理您的评论后再删除该用户！');
-                }else{
-                    DbOpt.del(targetObj,req,res,"del one obj success");
-                }
-            });
+            DBOpt.del(targetObj,req,res,"del one obj success");
         }
+    }else if(targetObj == AdminGroup){
+        // if(params.query.uid == req.session.adminUserInfo.group._id){
+        //     res.end('当前用户拥有的权限信息不能删除！');
+        // }else{
+            DBOpt.del(targetObj,req,res,"del one obj success");
+        // }
+    }else{
+        DBOpt.del(targetObj,req,res,"del one obj success");
     }
 
 });
@@ -144,6 +167,28 @@ router.get('/manage/:defaultUrl/del',function(req,res){
 // });
 
 //-------------------------对象删除结束-------------------------
+
+//-------------------------更新单条记录(执行更新)开始--------------------
+router.post('/manage/:defaultUrl/modify',function(req,res){
+    var currentPage = req.params.defaultUrl;
+    var targetObj = adminBean.getTargetObj(currentPage);
+    var params = url.parse(req.url,true);
+
+    if(targetObj == AdminUser || targetObj == User){
+        // req.body.password = DbOpt.encrypt(req.body.password,settings.encrypt_key);
+    }
+    DBOpt.updateOneByID(targetObj,req, res,"update one obj success")
+});
+//-------------------------更新单条记录(执行更新)结束--------------------
+
+//-------------------------获取所有数据开始--------------------
+router.get('/manage/:defaultUrl/findAll',function(req,res){
+    var currentPage = req.params.defaultUrl;
+    var targetObj = adminBean.getTargetObj(currentPage);
+    var params = url.parse(req.url,true);
+    DBOpt.findAll(targetObj,req, res,"findAll obj success")
+});
+//-------------------------获取所有数据结束--------------------
 //-------------------------对象新增开始-------------------------
 router.post('/manage/:defaultUrl/addOne',function(req,res){
 
@@ -152,6 +197,8 @@ router.post('/manage/:defaultUrl/addOne',function(req,res){
 
     if(targetObj == AdminUser){
         addOneAdminUser(req,res);
+    }else{
+        DBOpt.addOne(targetObj,req, res);
     }
 
 });

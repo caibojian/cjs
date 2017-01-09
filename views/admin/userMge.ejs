@@ -1,4 +1,9 @@
 <!-- 内容区域 -->
+<style>
+.am-selected-group {
+    width: 527.5px;
+}
+</style>
 <div class="row" ng-controller="adminUserList">
 	<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
 		<div class="widget am-cf">
@@ -12,9 +17,7 @@
 						<div class="am-btn-toolbar">
 							<div class="am-btn-group am-btn-group-xs">
 								<a href="#addNewAdminUser" data-am-modal="{target: '#addNewAdminUser', dimmer:0,closeViaDimmer: 0, width: 800}" type="button" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</a>
-								<button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 保存</button>
-								<button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span> 审核</button>
-								<button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除</button>
+								
 							</div>
 						</div>
 					</div>
@@ -22,13 +25,8 @@
 				<div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
 					<div class="am-form-group tpl-table-list-select">
 						<select data-am-selected="{btnSize: 'sm'}">
-						  <option value="option1">所有类别</option>
-						  <option value="option2">IT业界</option>
-						  <option value="option3">数码产品</option>
-						  <option value="option3">笔记本电脑</option>
-						  <option value="option3">平板电脑</option>
-						  <option value="option3">只能手机</option>
-						  <option value="option3">超极本</option>
+						<option >请选择用户组</option>
+						  <option value="{{_group._id}}" ng-repeat="_group in groups">{{_group.name}}</option>
 						</select>
 					</div>
 				</div>
@@ -47,6 +45,7 @@
 							<tr>
 								<th>用户名</th>
 								<th>姓名</th>
+								<th>用户组</th>
 								<th>邮箱</th>
 								<th>电话</th>
 								<th>创建时间</th>
@@ -57,12 +56,13 @@
 							<tr class="gradeX" ng-repeat="user in data">
 								<td>{{user.userName}}</td>
 								<td>{{user.name}}</td>
+								<td>{{user.group.name}}</td>
 								<td>{{user.email}}</td>
 								<td>{{user.phoneNum}}</td>
 								<td>{{user.createtime}}</td>
 								<td>
 									<div class="tpl-table-black-operation">
-										<a href="javascript:;">
+										<a href="#addNewAdminUser" data-whatever="{{user._id}}" data-am-modal="{target: '#addNewAdminUser', dimmer:0,closeViaDimmer: 0, width: 800}">
 											<i class="am-icon-pencil"></i> 编辑
 										</a>
 										<a href="javascript:;" class="tpl-table-black-operation-del" ng-click="delOneItem(user._id)">
@@ -104,12 +104,11 @@
                     <div class="am-form-group">
                         <label for="user-phone" class="am-u-sm-3 am-form-label">用户组<span class="tpl-form-line-small-title"></span></label>
                         <div class="am-u-sm-9">
-                            <select data-am-selected="{searchBox: 1}" style="display: none;">
-							<option value="a">-The.CC</option>
-							<option value="b">夕风色事实上事实上所所所所所所所</option>
-							<option value="o">Orange</option>
+                            <select data-am-selected-group="{btnSize: 'sm'}" ng-model="formData.group">
+							  <option value="{{_group._id}}" ng-repeat="_group in groups">{{_group.name}}</option>
 							</select>
                         </div>
+
                     </div>
 
                     <div class="am-form-group">

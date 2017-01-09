@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 //id生成器
 var shortid = require('shortid');
+var AdminGroup = require('./AdminGroup');
 
 var AdminUserSchema = new Schema({
 	_id: {
@@ -21,14 +22,18 @@ var AdminUserSchema = new Schema({
 	comments: String,
 	createtime: {type: Date, default: Date.now},
 	photo: {type: String, default: ""},
-	auth: {type: Boolean, default: false}
+	auth: {type: Boolean, default: false},
+	group: {
+        type : String,
+        ref : 'AdminGroup'
+    }
 });
 
 
 
 AdminUserSchema.statics = {
 	getOneItem: function(res, targetId, callBack){
-		adminUser.findOne({'_id': targetId}).exec(function(err, user){
+		AdminUser.findOne({'_id': targetId}).exec(function(err, user){
 			if(err){
 				res.end(err);
 			}

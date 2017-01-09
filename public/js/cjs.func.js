@@ -185,4 +185,24 @@ function initDelOption($scope,$http,info){
 
 }
 
+//关闭模态窗口初始化数据
+function clearModalData($scope,modalObj){
+    $scope.formData = {};
+    $scope.targetID = "";
+    modalObj.find(".form-control").val("");
+}
+//获取用户组数据
+function initGroups($scope,$http){
+    $http.get("/admin/manage/sysTemManage_uGroup/findAll").success(function(result){
+        console.log("getData success!");
+        if(result){
+            console.log(result);
+            $scope.groups = result;
+        }else{
+            console.log("获取分页信息失败")
+        }
+    });
+}
+
+
 

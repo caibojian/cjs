@@ -1,0 +1,127 @@
+<!-- 内容区域 -->
+<div class="row" ng-controller="adminGroup">
+	<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+		<div class="widget am-cf">
+			<div class="widget-head am-cf">
+				<div class="widget-title  am-cf">用户组列表</div>
+			</div>
+			<div class="widget-body  am-fr">
+
+				<div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+					<div class="am-form-group">
+						<div class="am-btn-toolbar">
+							<div class="am-btn-group am-btn-group-xs">
+								<a href="#addNewAdminGroup" data-am-modal="{target: '#addNewAdminGroup', dimmer:0,closeViaDimmer: 0, width: 800}" type="button" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</a>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
+					<div class="am-form-group tpl-table-list-select">
+						<select data-am-selected="{btnSize: 'sm'}">
+						  <option value="option1">所有类别</option>
+						  <option value="option2">IT业界</option>
+						  <option value="option3">数码产品</option>
+						  <option value="option3">笔记本电脑</option>
+						  <option value="option3">平板电脑</option>
+						  <option value="option3">只能手机</option>
+						  <option value="option3">超极本</option>
+						</select>
+					</div>
+				</div>
+				<div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
+					<div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
+						<input type="text" class="am-form-field ">
+						<span class="am-input-group-btn">
+						<button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search" type="button"></button>
+						</span>
+					</div>
+				</div>
+
+				<div class="am-u-sm-12">
+					<table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " id="example-r">
+						<thead>
+							<tr>
+								<th>用户组名称</th>
+								<th>权限</th>
+								<th>创建时间</th>
+								<th>备注</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="gradeX" ng-repeat="group in data">
+								<td>{{group.name}}</td>
+								<td>{{group.power}}</td>
+								<td>{{group.date}}</td>
+								<td>{{group.comments}}</td>
+								<td>
+									<div class="tpl-table-black-operation">
+										<a href="#addNewAdminGroup" data-whatever="{{group._id}}" data-am-modal="{target: '#addNewAdminGroup', dimmer:0,closeViaDimmer: 0, width: 800}">
+											<i class="am-icon-pencil"></i> 编辑
+										</a>
+										<a href="javascript:;" class="tpl-table-black-operation-del" ng-click="delOneItem(group._id)">
+											<i class="am-icon-trash"></i> 删除
+										</a>
+									</div>
+								</td>
+							</tr>
+							<!-- more data -->
+						</tbody>
+					</table>
+				</div>
+				<div class="am-u-lg-12 am-cf">
+					<% include pagination%>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--添加新用户模态窗口-->
+    <div class="am-modal" tabindex="-1" id="addNewAdminGroup">
+	  <div class="am-modal-dialog">
+        <div class="widget am-cf">
+            <div class="widget-head am-cf">
+                <div class="widget-title am-fl">用户信息</div>
+                <div class="widget-function am-fr">
+                    <a href="javascript:;" class="am-icon-cog"></a>
+                </div>
+            </div>
+            <div class="widget-body am-fr">
+                <form class="am-form tpl-form-border-form tpl-form-border-br" name="myForm" ng-submit="processForm(myForm.$valid)">
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">用户组名<span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" class="tpl-form-input" name="name" ng-model="formData.name" placeholder="请输入用户名">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-phone" class="am-u-sm-3 am-form-label">权限<span class="tpl-form-line-small-title"></span></label>
+                        <div class="am-u-sm-9">
+                            <select data-am-selected="{searchBox: 1}" style="display: none;">
+							<option value="a">-The.CC</option>
+							<option value="b">夕风色事实上事实上所所所所所所所</option>
+							<option value="o">Orange</option>
+							</select>
+                        </div>
+                    </div>
+ 					<div class="am-form-group">
+                        <label for="user-intro" class="am-u-sm-3 am-form-label">备注</label>
+                        <div class="am-u-sm-9">
+                            <textarea class="" rows="10" id="user-intro" placeholder="请输入备注内容" name="comments" ng-model="formData.comments"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success " >提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+	    </div>
+	  </div>
+	</div>
+</div>

@@ -7,12 +7,14 @@ var settings = require("../settings");
 //数据库操作
 var DBOpt = require("../models/DBOpt");
 var AdminUser = require("../models/AdminUser");
-
+var AdminGroup = require("../models/AdminGroup");
 var adminBean = {
 	getTargetObj : function(currentPage){
         var targetObj;
         if(currentPage === settings.adminUsersList[0] ){
             targetObj = AdminUser;
+        }else if(currentPage === settings.adminGroupList[0] ){
+            targetObj = AdminGroup;
         }
 
         return targetObj

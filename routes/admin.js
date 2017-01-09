@@ -10,6 +10,8 @@ var url = require('url');
 var validator = require('validator');
 //对象管理
 var adminBean = require('./adminBean');
+//短id
+var shortid = require('shortid');
 
 //判断是否登录
 function isAdminLogined(req){
@@ -43,12 +45,38 @@ router.get('/manage/getDocumentList/:defaultUrl', function(req, res, next){
     }
 });
 
+//获取多有对象
+router.get('/manage/:defaultUrl/findAll', function(req, res, next){
+    var currentPage = req.params.defaultUrl;
+    if(adminBean.checkAdminPower(req,currentPage + '_view')){
+        next();
+    }else{
+        return res.json({});
+    }
+});
+
 //对象新增
 router.post('/manage/:defaultUrl/addOne',function(req,res,next){
 
     var currentPage = req.params.defaultUrl;
     if(adminBean.checkAdminPower(req,currentPage + '_add')){
         next();
+    }else{
+        res.end(settings.system_noPower);
+    }
+});
+
+//更新单条记录(执行更新)
+router.post('/manage/:defaultUrl/modify',function(req,res,next){
+    var currentPage = req.params.defaultUrl;
+    var params = url.parse(req.url,true);
+    var targetId = params.query.uid;
+    if(adminBean.checkAdminPower(req,currentPage + '_modify')){
+        if(shortid.isValid(targetId)){
+            next();
+        }else{
+            res.end(settings.system_illegal_param);
+        }
     }else{
         res.end(settings.system_noPower);
     }
@@ -69,6 +97,23 @@ router.get('/manage/:defaultUrl/del',function(req,res,next){
     }else{
         res.end(settings.system_noPower);
     }
+});
+
+//获取单个对象数据
+router.get('/manage/:defaultUrl/item',function(req,res,next){
+    var currentPage = req.params.defaultUrl;
+    var params = url.parse(req.url,true);
+    var targetId = params.query.uid;
+    if(adminBean.checkAdminPower(req,currentPage + '_view')){
+        if(shortid.isValid(targetId)){
+            next();
+        }else{
+            res.end(settings.system_illegal_param);
+        }
+    }else{
+        return res.json({});
+    }
+
 });
 
 //自定义校验扩展

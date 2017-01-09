@@ -8,6 +8,8 @@ mongoose.Promise = require('bluebird');
 var settings = require('../settings');
 //后台管理用户
 var AdminUser = require('../models/AdminUser');
+//短id
+var shortid = require('shortid');
 
 mongoose.connect(settings.URL);
 var db = mongoose.connection;
@@ -78,6 +80,10 @@ var DBOpt = {
         // }else if(obj === UserNotify){
         //     query.populate('user').populate('notify');
         // }
+
+        if(obj === AdminUser){
+            query.populate('group');
+        }
         query.exec(function(err,docs){
             if(err){
                 console.log(err)
@@ -94,6 +100,69 @@ var DBOpt = {
                     docs : docs.slice(startNum - 1,startNum + limit -1),
                     pageInfo : pageInfo
                 });
+            }
+        })
+    },
+    del : function(obj,req,res,logMsg){
+        var params = url.parse(req.url,true);
+        var targetId = params.query.uid;
+        if(shortid.isValid(targetId)){
+            obj.remove({_id : params.query.uid},function(err,result){
+                if(err){
+                    res.end(err);
+                }else{
+                    console.log(logMsg+" success!");
+                    res.end("success");
+                }
+            })
+        }else{
+            res.end(settings.system_illegal_param);
+        }
+    },
+    updateOneByID : function(obj,req,res,logMsg){
+        var params = url.parse(req.url,true);
+        var targetId = params.query.uid;
+
+        if(shortid.isValid(targetId)){
+            var conditions = {_id : targetId};
+            req.body.updateDate = new Date();
+            var update = {$set : req.body};
+            obj.update(conditions, update, function (err,result) {
+                if(err){
+                    res.end(err);
+                }else{
+                    console.log(logMsg+" success!");
+                    res.end("success");
+                }
+            })
+        }else{
+            res.end(settings.system_illegal_param);
+        }
+    },
+    findOne : function(obj,req,res,logMsg){ //根据ID查找单条记录
+        var params = url.parse(req.url,true);
+        var targetId = params.query.uid;
+        if(shortid.isValid(targetId)){
+            obj.findOne({_id : targetId}, function (err,result) {
+                if(err){
+                    res.next(err);
+                }else{
+                    console.log(logMsg+" success!");
+                    return res.json(result);
+                }
+            })
+        }else{
+            res.end(settings.system_illegal_param);
+        }
+
+    },
+    findAll : function(obj,req,res,logMsg){//查找指定对象所有记录
+        obj.find({}, function (err,result) {
+            if(err){
+                res.next(err);
+            }else{
+                console.log(logMsg+" success!");
+                return res.json(result);
             }
         })
     },
