@@ -2,12 +2,13 @@
 //初始化普通列表分页
 function initPagination($scope,$http){
 	console.log("初始化普通列表分页");
+    $("#loading").modal();
     initPageInfo($scope);
     getPageInfos($scope,$http,"/admin/manage/getDocumentList/"+$('#currentCate').val(),'normalList');
 }
 
 function initPageInfo($scope){
-    $("#dataLoading").removeClass("hide");
+    $("#loading").modal();
     $scope.selectPage = [
         {name:'10',value : '10'},
         {name:'20',value : '20'},
@@ -113,9 +114,9 @@ function angularHttpPost($http,isValid,url,formData,callBack){
         })
         .success(function(data) {
             //  关闭所有模态窗口
-            // $('.modal').each(function(i){
-            //     $(this).modal("hide");
-            // });
+            $('.am-modal').each(function(i){
+                $(this).modal("close");
+            });
 
             if(data == 'success'){
                 callBack(data);
@@ -158,11 +159,11 @@ function initDelOption($scope,$http,info){
 
     // 单条记录删除
     $scope.delOneItem = function(id){
-        // initCheckIfDo($scope,id,info,function(currentID){
+        initCheckIfDo($scope,id,info,function(currentID){
             angularHttpGet($http,"/admin/manage/"+$('#currentCate').val()+"/del?uid="+id,function(){
                 initPagination($scope,$http);
             });
-        // });
+        });
     };
 
     $scope.getNewIds = function(){
@@ -183,6 +184,26 @@ function initDelOption($scope,$http,info){
         }
     }
 
+}
+
+//提示用户操作窗口
+function initCheckIfDo($scope,targetId,msg,callBack){
+    $('#checkIfDo').on('open.modal.amui', function (event) {
+        if(targetId){
+            $scope.targetID = targetId;
+        }
+        $(this).find('.modal-msg').text(msg);
+    }).on('close.modal.amui', function (event) {
+        $scope.targetID ="";
+    });
+    $('#checkIfDo').modal({dimmer:true,
+        relatedTarget: this,
+        onConfirm: function(e) {
+            callBack(targetId);
+        },
+        onCancel: function(e) {
+        }
+    });
 }
 
 //关闭模态窗口初始化数据
