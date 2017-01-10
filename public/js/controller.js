@@ -24,6 +24,21 @@ cjsApp.factory('getItemService',['$http',function($http){
     }
 }]);
 
+cjsApp.factory('webSocketData', function () {
+    var ws = io.connect('http://127.0.0.1:8888');
+    ws.on('connect', function(msg){
+        console.log(msg);
+    });
+    ws.on('logChange', function(msg){
+        console.log(msg);
+    });
+    return {
+        sendMsg: function(msg){
+            ws.emit('send.message', msg);
+        }
+    }
+});  
+
  //管理员用户列表
  cjsApp.controller("adminUserList",['$scope','$http','pageData','getItemService',
  	function($scope,$http,pageData,getItemService){
@@ -139,3 +154,8 @@ cjsApp.controller("adminGroup",['$scope','$http','pageData','getItemService',fun
     }
 }]);
 
+//实时日志contruller
+cjsApp.controller("adminLoging",['$scope','webSocketData',function($scope,webSocketData){
+    webSocketData.sendMsg('sendMsg');
+}]);
+  
