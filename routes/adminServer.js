@@ -186,7 +186,7 @@ router.get('/manage/:defaultUrl/findAll',function(req,res){
     var currentPage = req.params.defaultUrl;
     var targetObj = adminBean.getTargetObj(currentPage);
     var params = url.parse(req.url,true);
-    DBOpt.findAll(targetObj,req, res,"findAll obj success")
+    DBOpt.findAll(targetObj,req, res,"findAll one obj success")
 });
 //-------------------------获取所有数据结束--------------------
 //-------------------------对象新增开始-------------------------
