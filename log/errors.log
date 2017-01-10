@@ -1,0 +1,2 @@
+[2017-01-10 16:47:20.813] [ERROR] http - ::1 - - "GET /admin/manage HTTP/1.1" 500 1642 "" "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36"
+[2017-01-10 16:48:08.555] [ERROR] http - ::1 - - "GET /admin/manage/chart.html HTTP/1.1" 404 36 "http://localhost:8888/admin/manage/groupMge" "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36"
