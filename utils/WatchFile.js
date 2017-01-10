@@ -16,7 +16,7 @@ function createLineReader(fileName) {
         var remainder = null;
         fs.watchFile(fileName,{
             persistent: true,
-            interval: 5007
+            interval: 1000
         },function(curr, prev){
             // console.log('the current mtime is: ' + curr.mtime);
             // console.log('the previous mtime was: ' + prev.mtime);

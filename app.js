@@ -7,6 +7,8 @@ var partials = require('express-partials');
 
 var adminServer = require('./routes/adminServer');
 var admin = require('./routes/admin');
+var io = require('socket.io')();
+var createLineReader = require('./utils/WatchFile');
 /*实例化express对象*/
 var app = express();
 //session配置
@@ -35,6 +37,29 @@ app.use(function(req, res, next){
     res.locals.myDomain = req.headers.host;
     next();
 });
+//监听日志变化
+var read = new createLineReader(path.join(__dirname, 'log/app.log'));
+
+//事件监听
+app.io = io;
+
+io.on('connection', function(client){
+
+    read.on('line', function(line){
+        console.log(line.toString());
+        client.emit('logChange', line.toString());
+    });
+    client.emit('connect', 'connection');
+    // 监听发送消息
+    client.on('send.message', function(msg){
+        console.log(msg);
+    });
+    // 断开连接时，通知其它用户
+    client.on('disconnect', function(){
+        
+    })
+
+})
 
 /*指定路由控制*/
 app.use('/admin', admin);

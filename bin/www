@@ -89,5 +89,5 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-//var io = app.io;
-//io.attach( server );
+var io = app.io;
+io.attach( server );
