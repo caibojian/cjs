@@ -28,7 +28,7 @@
 - 持久层框架：mongodb
 - 缓存框架：Redis（暂未完成）
 - 会话管理：express-session
-- 日志管理：SLF4J、Log4j2
+- 日志管理：Log4js
 - 前端框架：Angular JS + Bootstrap + Jquery
 
 ***
