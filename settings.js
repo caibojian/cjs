@@ -15,7 +15,7 @@
  	SYSTEMMANAGE : ['sysTemManage','cjs后台管理'],  // 后台模块(系统管理)
     adminUsersList : ['sysTemManage_user','系统用户管理'],
     adminGroupList : ['sysTemManage_uGroup','系统用户组管理'],
-    adsList : ['sysTemManage_ads','广告管理'],
+    adminLoging : ['sysTemManage_loging','实时日志'],
     filesList : ['sysTemManage_files','文件管理'],
     DATAMANAGE : ['sysTemManage_data','数据管理'], // 数据管理
     backUpData : ['sysTemManage_data_1','数据备份'], // 数据备份
@@ -40,16 +40,5 @@
     USERMANAGE : ['userManage','会员管理'], // 后台模块(会员管理)
     regUsersList: ['userManage_user','注册用户管理'],
     system_noPower : '用户没有权限',
-    log4js_conf:{
-          "appenders": [
-            {
-              "type": "file",
-              "filename": "log/log_file.log",
-              "maxLogSize": 20480,
-              "backups": 3,
-            },
-            { type: "console" }
-          ],
-          replaceConsole: true
-        }
+    
  };

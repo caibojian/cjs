@@ -1,0 +1,52 @@
+<!-- 内容区域 -->
+<style>
+style{
+  $('html, body').animate({scrollTop: $(document).height()}, 50);
+}
+</style>
+<div class="row" >
+  <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+    <div class="widget am-cf">
+      <div class="widget-head am-cf">
+        <div class="widget-title  am-cf">实时日志</div>
+      </div>
+      <div class="widget-body  am-fr">
+
+        <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+          <div class="am-form-group">
+            <div class="am-btn-toolbar">
+              <div class="am-btn-group am-btn-group-xs">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
+          <div class="am-form-group tpl-table-list-select">
+            <select data-am-selected="{btnSize: 'sm'}">
+             
+            </select>
+          </div>
+        </div>
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
+          <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
+            <input type="text" class="am-form-field ">
+            <span class="am-input-group-btn">
+              <button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search" type="button"></button>
+            </span>
+          </div>
+        </div>
+
+        <div class="am-u-sm-12" ng-controller="adminLoging">
+          <div class="am-g error-log">
+            <div class="am-u-sm-12 am-u-sm-centered">
+              <pre class="am-pre-scrollable" style="max-height: 50rem;" id="scroll">
+              <div id="loging">
+              </div>
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

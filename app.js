@@ -9,6 +9,8 @@ var adminServer = require('./routes/adminServer');
 var admin = require('./routes/admin');
 var log4js = require('log4js');
 var log = log4js.getLogger("app");
+var io = require('socket.io')();
+var createLineReader = require('./utils/WatchFile');
 /*实例化express对象*/
 var app = express();
 //session配置
@@ -38,6 +40,35 @@ app.use(function(req, res, next){
     res.locals.myDomain = req.headers.host;
     next();
 });
+//监听日志变化
+var read = new createLineReader(path.join(__dirname, 'log/app.log'));
+
+//事件监听
+app.io = io;
+
+io.on('connection', function(client){
+
+    read.on('line', function(line){
+        var arr = line.toString().split(" ");
+        if(arr.length>4){
+            var returnlog = {
+                time: arr[0]+" "+arr[1],
+                level: arr[2],
+                type: arr[3],
+                msg: arr.slice(4)
+            }
+            client.emit('logChange', returnlog);
+        }
+    });
+    client.emit('connect', 'connection');
+    // 监听发送消息
+    client.on('send.message', function(msg){
+    });
+    // 断开连接时，通知其它用户
+    client.on('disconnect', function(){
+    })
+
+})
 
 /*指定路由控制*/
 app.use('/admin', admin);

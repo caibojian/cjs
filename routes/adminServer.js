@@ -34,7 +34,10 @@ router.get('/manage/userMge', function(req, res) {
 router.get('/manage/groupMge', function(req, res) {
     res.render('admin/groupMge', setPageInfo(req,res,settings.adminGroupList));
 });
-
+//实时日志界面
+router.get('/manage/loging', function(req, res) {
+    res.render('admin/loging', setPageInfo(req,res,settings.adminLoging));
+});
 /*处理登录请求*/
 router.post('/doLogin', function(req, res){
 	var userName = req.body.userName;
