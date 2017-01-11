@@ -25,11 +25,15 @@
 - 会话管理：express-session
 - 日志管理：SLF4J、Log4j2
 - 前端框架：Angular JS + Bootstrap + Jquery
+
 ***
+
 # 启动说明
 - npm install
 - npm start
+
 ***
+
 # 感谢
 - [doramart/DoraCMS](https://github.com/doramart/DoraCMS)--本框架是基于该系统进行开发的
 - [Amaze UI](http://tpl.amazeui.org/preview.html?21)--前端框架
