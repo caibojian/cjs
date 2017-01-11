@@ -1,15 +1,20 @@
 #CJS项目简介
 ### 界面展示：
-![](){ImgCap}{/ImgCap}
+
+![首页](http://git.oschina.net/uploads/images/2017/0111/155130_43e3cca1_130351.png "首页")
 
 ### 用户管理
-![](){ImgCap}{/ImgCap}
+
+![用户管理](http://git.oschina.net/uploads/images/2017/0111/155140_4abb325f_130351.png "用户管理")
 
 ### 权限管理
-![](){ImgCap}{/ImgCap}
+
+![用户组管理](http://git.oschina.net/uploads/images/2017/0111/155148_6acbfe4a_130351.png "用户组管理")
 
 ### 实时日志
-![](){ImgCap}{/ImgCap}
+
+![实时日志](http://git.oschina.net/uploads/images/2017/0111/155225_48bc077a_130351.png "实时日志")
+
 ***
 # 主要功能
 - 用户管理：可增删查改人员信息。
