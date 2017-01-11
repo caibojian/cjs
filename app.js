@@ -7,6 +7,8 @@ var partials = require('express-partials');
 
 var adminServer = require('./routes/adminServer');
 var admin = require('./routes/admin');
+var log4js = require('log4js');
+var log = log4js.getLogger("app");
 /*实例化express对象*/
 var app = express();
 //session配置
@@ -16,6 +18,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
 app.use(bodyParser.json({limit: '50mb'})); // 限制上传5M
 app.use(bodyParser.urlencoded({ extended: false , limit: '50mb' }));
 app.set('views', path.join(__dirname, 'views'));

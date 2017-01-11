@@ -6,12 +6,15 @@ var express = require('express');
 var router = express.Router();
 router.caseSensitive = true;
 var url = require('url');
+//站点配置
+var settings = require("../settings");
 //数据校验
 var validator = require('validator');
 //对象管理
 var adminBean = require('./adminBean');
 //短id
 var shortid = require('shortid');
+var log = require('log4js').getLogger("admin");
 
 //判断是否登录
 function isAdminLogined(req){
@@ -28,9 +31,11 @@ router.get("/", function(req, res, next){
 });
 //管理页面请求
 router.get(["/manage", "/manage/*"], function(req, res, next){
+    log.info('用户请求后台管理页面');
 	if(isAdminLogined(req)){
 		next();
 	}else{
+        log.info('用户请求后台管理登录');
 		res.redirect("/admin/login");
 	}
 });

@@ -53,7 +53,7 @@
 						<tbody>
 							<tr class="gradeX" ng-repeat="group in data">
 								<td>{{group.name}}</td>
-								<td>{{group.power}}</td>
+								<td>{{group.power| limitTo : 80}}</td>
 								<td>{{group.date}}</td>
 								<td>{{group.comments}}</td>
 								<td>
@@ -85,7 +85,7 @@
             <div class="widget-head am-cf">
                 <div class="widget-title am-fl">用户信息</div>
                 <div class="widget-function am-fr">
-                    <a href="javascript:;" class="am-icon-cog"></a>
+                     <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
                 </div>
             </div>
             <div class="widget-body am-fr">
@@ -100,11 +100,7 @@
                     <div class="am-form-group">
                         <label for="user-phone" class="am-u-sm-3 am-form-label">权限<span class="tpl-form-line-small-title"></span></label>
                         <div class="am-u-sm-9">
-                            <select data-am-selected="{searchBox: 1}" style="display: none;">
-							<option value="a">-The.CC</option>
-							<option value="b">夕风色事实上事实上所所所所所所所</option>
-							<option value="o">Orange</option>
-							</select>
+							<ul class="ztree" id="groupPowerTree" style="height:200px;width:100%;overflow-y: auto;padding:10px 10px; background:none;border: 1px solid #c2cad8;"></ul>
                         </div>
                     </div>
  					<div class="am-form-group">
@@ -123,5 +119,9 @@
             </div>
 	    </div>
 	  </div>
+	  	<div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+			<ul id="dark" class="ztree" style="margin-top:0; width:180px; height: 300px;"></ul>
+		</div>
 	</div>
+	
 </div>

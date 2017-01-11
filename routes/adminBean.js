@@ -19,7 +19,7 @@ var adminBean = {
 
         return targetObj
     },
-
+    //权限校验
     checkAdminPower : function(req,key){
         var power = false;
         var uPower = req.session.adminPower;
@@ -33,15 +33,19 @@ var adminBean = {
                 }
             }
         }
-        //return power;
-        return true;
+        return power;
     },
     setQueryByArea : function(req,keyPr,targetObj,area){
         var newKeyPr = keyPr;
        
         return newKeyPr;
     },
-
+    getClienIp : function(req){
+        return req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
+    },
 }
 
 module.exports = adminBean;

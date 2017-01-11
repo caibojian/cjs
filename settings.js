@@ -39,5 +39,17 @@
 
     USERMANAGE : ['userManage','会员管理'], // 后台模块(会员管理)
     regUsersList: ['userManage_user','注册用户管理'],
-
+    system_noPower : '用户没有权限',
+    log4js_conf:{
+          "appenders": [
+            {
+              "type": "file",
+              "filename": "log/log_file.log",
+              "maxLogSize": 20480,
+              "backups": 3,
+            },
+            { type: "console" }
+          ],
+          replaceConsole: true
+        }
  };

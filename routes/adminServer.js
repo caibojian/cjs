@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 router.caseSensitive = true;
 var url = require('url');
+var log = require('log4js').getLogger("adminServer");
 //站点配置
 var settings = require("../settings");
 //数据校验
@@ -14,6 +15,8 @@ var DBOpt = require('../models/DBOpt');
 var AdminUser = require('../models/AdminUser');
 //后台管理用户组
 var AdminGroup = require("../models/AdminGroup");
+//后台日志管理
+var SystemLog = require("../models/SystemLog");
 
 /*跳转到到登录页面*/
 router.get("/login", function(req, res, net){
@@ -39,14 +42,18 @@ router.post('/doLogin', function(req, res){
 	if(true){
 		if(validator.isUserName(userName) && validator.isPsd(password)){
             //验证用户名密码
-            AdminUser.findOne({'userName': userName, 'password': password}).exec(function(err, user){
+            AdminUser.findOne({'userName': userName, 'password': password}).populate('group').exec(function(err, user){
                 if(err){
                     res.end(err);
                 }
                 if(user){
                     req.session.adminlogined = true;
                     req.session.adminUserInfo = user;
+                    req.session.adminPower = user.group.power;
+                    // 存入操作日志
+                    SystemLog.addLoginLogs(req,res,adminBean.getClienIp(req));
                     res.end("success");
+                    log.info('登录成功');
                 }else{
                     console.log("登录失败");
                     res.end("用户名或密码错误"); 
@@ -174,7 +181,7 @@ router.post('/manage/:defaultUrl/modify',function(req,res){
     var targetObj = adminBean.getTargetObj(currentPage);
     var params = url.parse(req.url,true);
 
-    if(targetObj == AdminUser || targetObj == User){
+    if(targetObj == AdminUser){
         // req.body.password = DbOpt.encrypt(req.body.password,settings.encrypt_key);
     }
     DBOpt.updateOneByID(targetObj,req, res,"update one obj success")

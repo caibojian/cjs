@@ -3,10 +3,13 @@
 .am-selected-group {
     width: 527.5px;
 }
+.background-deloge{
+	background-color: rgb(248, 248, 248);
+}
 </style>
 <div class="row" ng-controller="adminUserList">
 	<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
-		<div class="widget am-cf">
+		<div class=" background-deloge widget am-cf">
 			<div class="widget-head am-cf">
 				<div class="widget-title  am-cf">用户列表</div>
 			</div>
@@ -23,7 +26,7 @@
 					</div>
 				</div>
 				<div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
-					<div class="am-form-group tpl-table-list-select">
+					<div class="am-form am-form-group tpl-table-list-select">
 						<select data-am-selected="{btnSize: 'sm'}">
 						<option >请选择用户组</option>
 						  <option value="{{_group._id}}" ng-repeat="_group in groups">{{_group.name}}</option>
@@ -89,7 +92,7 @@
             <div class="widget-head am-cf">
                 <div class="widget-title am-fl">用户信息</div>
                 <div class="widget-function am-fr">
-                    <a href="javascript:;" class="am-icon-cog"></a>
+                   <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
                 </div>
             </div>
             <div class="widget-body am-fr">
