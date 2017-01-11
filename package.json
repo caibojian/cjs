@@ -39,7 +39,7 @@
     "request": "^2.67.0",
     "serve-favicon": "~2.2.0",
     "shortid": "^2.2.2",
-    "log4js":"^1.1.0"
+    "log4js":"^1.1.0",
     "socket.io": "^1.7.2",
     "validator": "^3.37.0"
   }
