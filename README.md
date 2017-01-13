@@ -39,6 +39,8 @@
 # 启动说明
 - npm install
 - npm start
+- 配置文件在settings.js文件中，配置mongodb数据库的连接。
+- 项目第一次运行会自动给数据库插入一个管理员用户，用户名：admin，密码：password
 
 ***
 
