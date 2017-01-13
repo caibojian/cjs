@@ -41,6 +41,10 @@ router.get('/manage/groupMge', function(req, res) {
 router.get('/manage/loging', function(req, res) {
     res.render('admin/loging', setPageInfo(req,res,settings.adminLoging));
 });
+//系统状态界面
+router.get('/manage/netdata', function(req, res) {
+    res.render('admin/netdatatv', setPageInfo(req,res,settings.adminNetdata));
+});
 /*处理登录请求*/
 router.post('/doLogin', function(req, res){
 	var userName = req.body.userName;

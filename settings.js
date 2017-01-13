@@ -16,6 +16,7 @@
     adminUsersList : ['sysTemManage_user','系统用户管理'],
     adminGroupList : ['sysTemManage_uGroup','系统用户组管理'],
     adminLoging : ['sysTemManage_loging','实时日志'],
+    adminNetdata : ['sysTemManage_netdata','系统状态'],
    
     system_noPower : '用户没有权限',
     system_Power : "[\"sysTemManage:true\", \"sysTemManage_user:true\", \"sysTemManage_user_add:true\", "+
