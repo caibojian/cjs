@@ -8,8 +8,11 @@ mongoose.Promise = require('bluebird');
 var settings = require('../settings');
 //后台管理用户
 var AdminUser = require('../models/AdminUser');
+var AdminGroup = require('../models/AdminGroup');
 //短id
 var shortid = require('shortid');
+//密码加密
+var pass = require('../utils/pass');
 
 mongoose.connect(settings.URL);
 var db = mongoose.connection;
@@ -19,25 +22,42 @@ db.once('open', function (callback) {
   	console.log("连接mongodb");
   	//初始化管理员用户信息
 	//验证用户名密码
-    AdminUser.findOne({'userName': 'admin', 'password': 'password'}).exec(function(err, user){
+    AdminUser.findOne({'userName': 'admin'}).exec(function(err, user){
         if(err){
             console.log("初始化管理员用户信息失败");
         }
         if(user){
            	console.log("管理员用户已存在");
         }else{
-			console.log("管理员用户不存在");
-			var adminuser = new AdminUser();
-			adminuser.userName = 'admin';
-			adminuser.password = 'password';
-			adminuser.name = '超级管理员'
-			adminuser.save(function(err){
-				if(err){
-	                console.log("初始化管理员用户信息失败");
-	            }else{
-	                console.log("初始化管理员用户信息成功");
-	            }
-			});
+            var groupID = shortid.generate();
+            var adminGroup = new AdminGroup();
+            adminGroup.name = '管理员';
+            adminGroup._id = groupID;
+            adminGroup.power = settings.system_Power;
+            adminGroup.save(function(eer){
+                if(err){
+                    console.log("初始化管理员用户组信息失败");
+                }else{
+                    console.log("初始化管理员用户组信息成功");
+                    console.log("管理员用户不存在");
+                    var adminuser = new AdminUser();
+                    adminuser.userName = 'admin';
+                    adminuser.group = groupID;
+                    adminuser.name = '超级管理员'
+                    pass.hash('password',function(err, salt, hash){
+                        adminuser.password = hash;
+                        adminuser.salt = salt;
+                        adminuser.save(function(err){
+                            if(err){
+                                console.log("初始化管理员用户信息失败");
+                            }else{
+                                console.log("初始化管理员用户信息成功");
+                            }
+                        });
+                    });
+                }
+            });
+			
         }
     });
 });

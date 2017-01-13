@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 router.caseSensitive = true;
 var url = require('url');
+var pass = require('../utils/pass');
 var log = require('log4js').getLogger("adminServer");
 //站点配置
 var settings = require("../settings");
@@ -17,6 +18,8 @@ var AdminUser = require('../models/AdminUser');
 var AdminGroup = require("../models/AdminGroup");
 //后台日志管理
 var SystemLog = require("../models/SystemLog");
+//密码加密
+var pass = require('../utils/pass');
 
 /*跳转到到登录页面*/
 router.get("/login", function(req, res, net){
@@ -45,18 +48,27 @@ router.post('/doLogin', function(req, res){
 	if(true){
 		if(validator.isUserName(userName) && validator.isPsd(password)){
             //验证用户名密码
-            AdminUser.findOne({'userName': userName, 'password': password}).populate('group').exec(function(err, user){
+            AdminUser.findOne({'userName': userName}).populate('group').exec(function(err, user){
                 if(err){
                     res.end(err);
                 }
                 if(user){
-                    req.session.adminlogined = true;
-                    req.session.adminUserInfo = user;
-                    req.session.adminPower = user.group.power;
-                    // 存入操作日志
-                    SystemLog.addLoginLogs(req,res,adminBean.getClienIp(req));
-                    res.end("success");
-                    log.info('登录成功');
+                    pass.hash(password, user.salt, function(err, hash){
+                        console.log(user.password);
+                        console.log(hash);
+                        if(user.password == hash){
+                            req.session.adminlogined = true;
+                            req.session.adminUserInfo = user;
+                            req.session.adminPower = user.group.power;
+                            // 存入操作日志
+                            SystemLog.addLoginLogs(req,res,adminBean.getClienIp(req));
+                            res.end("success");
+                            log.info('登录成功');
+                        }else{
+                            console.log("登录失败");
+                            res.end("用户名或密码错误"); 
+                        }
+                    });
                 }else{
                     console.log("登录失败");
                     res.end("用户名或密码错误"); 
@@ -86,6 +98,7 @@ router.get('/manage/:defaultUrl/item',function(req,res){
 
     if(targetObj == AdminUser){
         AdminUser.getOneItem(res,targetId,function(user){
+            user.password = "";
             return res.json(user);
         });
     }else{
@@ -186,6 +199,12 @@ router.post('/manage/:defaultUrl/modify',function(req,res){
 
     if(targetObj == AdminUser){
         // req.body.password = DbOpt.encrypt(req.body.password,settings.encrypt_key);
+        pass.hash(req.body.password, function(err, salt, hash){
+            req.body.password = hash;
+            req.body.salt = salt;
+            DBOpt.updateOneByID(targetObj,req, res,"update one obj success")
+        });
+        
     }
     DBOpt.updateOneByID(targetObj,req, res,"update one obj success")
 });
@@ -234,7 +253,11 @@ function addOneAdminUser(req,res){
                     // 密码加密
                     //req.body.password = DbOpt.encrypt(req.body.password,settings.encrypt_key);
                     //req.body.group = new AdminGroup({_id : req.body.group});
-                    DBOpt.addOne(AdminUser,req, res);
+                    pass.hash(req.body.password, function(err, salt, hash){
+                        req.body.password = hash;
+                        req.body.salt = salt;
+                        DBOpt.addOne(AdminUser,req, res);
+                    });
                 }
             }
         })

@@ -18,5 +18,8 @@
     adminLoging : ['sysTemManage_loging','实时日志'],
    
     system_noPower : '用户没有权限',
-    
+    system_Power : "[\"sysTemManage:true\", \"sysTemManage_user:true\", \"sysTemManage_user_add:true\", "+
+    "\"sysTemManage_user_view:true\", \"sysTemManage_user_modify:true\", \"sysTemManage_user_del:true\", "+
+    "\"sysTemManage_uGroup:true\", \"sysTemManage_uGroup_add:true\", \"sysTemManage_uGroup_view:true\", "+
+    "\"sysTemManage_uGroup_modify:true\", \"sysTemManage_uGroup_del:true\"]"
  };

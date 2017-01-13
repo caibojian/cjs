@@ -39,14 +39,14 @@ function createLineReader(fileName) {
 
                 var data=buffer.slice(0,bytesRead)
                 if(remainder != null){//append newly received data chunk
-                    console.log("remainder length:"+remainder.length);
+                    // console.log("remainder length:"+remainder.length);
                     tmp = new Buffer(remainder.length+bytesRead);
                     remainder.copy(tmp);
                     //data=buffer.slice(0,bytesRead);
                     data.copy(tmp,remainder.length)
                     data = tmp;
                 }
-                console.log("data length:"+data.length);
+                // console.log("data length:"+data.length);
                 for(i=0; i<data.length; i++){
                     if(newlines.indexOf(data[i]) >=0){ //\r \n new line
                         var line = data.slice(start,i);
