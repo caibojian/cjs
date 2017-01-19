@@ -121,7 +121,6 @@ router.get('/manage/getDocumentList/:defaultUrl',function(req,res){
     var pageInfo;
 
 //    根据条件查询记录(如果有条件传递，则按条件查询)
-    var query;
     
     if(targetObj == "AdminUser"){
         models.AdminUser.findAndCountAll({
