@@ -11,13 +11,7 @@ var validator = require('validator');
 //对象管理
 var adminBean = require('./adminBean');
 //数据操作
-var DBOpt = require('../models/DBOpt');
-//后台管理用户
-var AdminUser = require('../models/AdminUser');
-//后台管理用户组
-var AdminGroup = require("../models/AdminGroup");
-//后台日志管理
-var SystemLog = require("../models/SystemLog");
+var models = require('../models');
 //密码加密
 var pass = require('../utils/pass');
 
@@ -51,37 +45,33 @@ router.post('/doLogin', function(req, res){
 	var password = req.body.password;
 	if(true){
 		if(validator.isUserName(userName) && validator.isPsd(password)){
-            //验证用户名密码
-            AdminUser.findOne({'userName': userName}).populate('group').exec(function(err, user){
-                if(err){
-                    res.end(err);
+            models.AdminUser.findOne({
+                include: [models.AdminGroup],
+                where :{
+                  userName: userName
                 }
-                if(user){
-                    pass.hash(password, user.salt, function(err, hash){
-                        console.log(user.password);
+            }).then(function(result){
+                if(result){
+                   pass.hash(password, result.salt, function(err, hash){
+                        console.log(result.password);
                         console.log(hash);
-                        if(user.password == hash){
+                        if(result.password == hash){
                             req.session.adminlogined = true;
-                            req.session.adminUserInfo = user;
-                            req.session.adminPower = user.group.power;
-                            // 存入操作日志
-                            SystemLog.addLoginLogs(req,res,adminBean.getClienIp(req));
+                            req.session.adminUserInfo = result;
+                            req.session.adminPower = result.AdminGroup.power;
                             res.end("success");
                             log.info('登录成功');
                         }else{
                             console.log("登录失败");
                             res.end("用户名或密码错误"); 
                         }
-                    });
-                }else{
-                    console.log("登录失败");
-                    res.end("用户名或密码错误"); 
+                    }); 
                 }
-            });
-		}
-	}else{
-		console.log("登录失败");
-		res.end("用户名或密码错误");
+            })
+		}else{
+            console.log("登录失败");
+            res.end("用户名或密码错误");
+        }
 	}
 });
 

@@ -4,8 +4,6 @@
  */
 var url = require('url');
 var settings = require("../settings");
-//数据库操作
-var DBOpt = require("../models/DBOpt");
 var AdminUser = require("../models/AdminUser");
 var AdminGroup = require("../models/AdminGroup");
 var adminBean = {
