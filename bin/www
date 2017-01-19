@@ -49,6 +49,7 @@ models.sequelize.sync().then(function() {
              models.AdminUser.create({
             userName: 'admin',
             name: '超级管理员',
+            email: 'caidao1991@qq.com',
             password: password,
             salt: salt,
             AdminGroupId:group.id

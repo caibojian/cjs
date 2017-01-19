@@ -10,9 +10,9 @@ var adminBean = {
 	getTargetObj : function(currentPage){
         var targetObj;
         if(currentPage === settings.adminUsersList[0] ){
-            targetObj = AdminUser;
+            targetObj = "AdminUser";
         }else if(currentPage === settings.adminGroupList[0] ){
-            targetObj = AdminGroup;
+            targetObj = "AdminGroup";
         }
 
         return targetObj

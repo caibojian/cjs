@@ -109,11 +109,42 @@ router.get('/manage/:defaultUrl/item',function(req,res){
 router.get('/manage/getDocumentList/:defaultUrl',function(req,res){
     var targetObj = adminBean.getTargetObj(req.params.defaultUrl);
     var params = url.parse(req.url,true);
+    console.log(params);
     var keywords = params.query.searchKey;
     var area = params.query.area;
     var keyPr = [];
-    keyPr = adminBean.setQueryByArea(req,keyPr,targetObj,area);
-    DBOpt.pagination(targetObj,req, res,keyPr);
+
+    var params = url.parse(req.url,true);
+    var startNum = (params.query.currentPage - 1)*params.query.limit + 1;
+    var currentPage = Number(params.query.currentPage);
+    var limit = Number(params.query.limit);
+    var pageInfo;
+
+//    根据条件查询记录(如果有条件传递，则按条件查询)
+    var query;
+    
+    if(targetObj == "AdminUser"){
+        models.AdminUser.findAndCountAll({
+            'include': [models.AdminGroup],
+            'attributes': ['id', 'name', 'userName', 'email', 'phoneNum', 'comments', 'createtime', 'photo', 'auth', 'createdAt', 'updatedAt', 'AdminGroupId'],
+            limit: startNum + limit -1,
+            offset: startNum -1
+        }).then(function(result){
+            pageInfo = {
+                    "totalItems" : result.count,
+                    "currentPage" : currentPage,
+                    "limit" : limit,
+                    "startNum" : Number(startNum)
+                };
+
+            return res.json({
+                docs : result.rows,
+                pageInfo : pageInfo
+            });
+        })
+    }else{
+
+    }
 
 });
 

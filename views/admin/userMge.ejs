@@ -59,10 +59,10 @@
 							<tr class="gradeX" ng-repeat="user in data">
 								<td>{{user.userName}}</td>
 								<td>{{user.name}}</td>
-								<td>{{user.group.name}}</td>
+								<td>{{user.AdminGroup.name}}</td>
 								<td>{{user.email}}</td>
 								<td>{{user.phoneNum}}</td>
-								<td>{{user.createtime}}</td>
+								<td>{{user.createdAt}}</td>
 								<td>
 									<div class="tpl-table-black-operation">
 										<a href="#addNewAdminUser" data-whatever="{{user._id}}" data-am-modal="{target: '#addNewAdminUser', dimmer:0,closeViaDimmer: 0, width: 800}">
