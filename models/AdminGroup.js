@@ -3,25 +3,23 @@
  * 员用户组对象
  */
 
-var mongoose = require('mongoose');
-var shortid = require('shortid');
-var Schema = mongoose.Schema;
+"use strict";
 
-//mongoose.connect("mongodb://localhost/doracms")
+module.exports = function(sequelize, DataTypes) {
+  var AdminGroup = sequelize.define("AdminGroup", {
+    name:  DataTypes.STRING,
+    power : DataTypes.TEXT,
+    date: { type: DataTypes.DATE, default: Date.now },
+    comments : DataTypes.STRING
+  }, {
+    classMethods: {
+      associate: function(models) {
+        // Using additional options like CASCADE etc for demonstration
+        // Can also simply do Task.belongsTo(models.User);
+        AdminGroup.hasMany(models.AdminUser);
+      }
+    }
+  });
 
-var AdminGroupSchema = new Schema({
-    _id: {
-        type: String,
-        unique: true,
-        'default': shortid.generate
-    },
-    name:  String,
-    power : String,
-    date: { type: Date, default: Date.now },
-    comments : String
-});
-
-
-var AdminGroup = mongoose.model("AdminGroup",AdminGroupSchema);
-
-module.exports = AdminGroup;
+  return AdminGroup;
+};

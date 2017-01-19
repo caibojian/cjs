@@ -1,48 +1,29 @@
 /**
  *后台管理元用户
  **/
-var mongoose = require('mongoose');
+"use strict";
 
-var Schema = mongoose.Schema;
-//id生成器
-var shortid = require('shortid');
-var AdminGroup = require('./AdminGroup');
-
-var AdminUserSchema = new Schema({
-	_id: {
-		type: String,
-		unique: true,
-		'default': shortid.generate
-	},
-	name: String,
-	userName: String,
-	password: String,
-	email: String,
-	phoneNum: Number,
-	salt: String,
-	comments: String,
-	createtime: {type: Date, default: Date.now},
-	photo: {type: String, default: ""},
-	auth: {type: Boolean, default: false},
-	group: {
-        type : String,
-        ref : 'AdminGroup'
+module.exports = function(sequelize, DataTypes) {
+  var AdminUser = sequelize.define("AdminUser", {
+  	name: DataTypes.STRING,
+	userName: DataTypes.STRING,
+	password: DataTypes.STRING,
+	email: DataTypes.STRING,
+	phoneNum: DataTypes.STRING,
+	salt: DataTypes.STRING,
+	comments: DataTypes.STRING,
+	createtime: {type: DataTypes.DATE, default: Date.now},
+	photo: {type: DataTypes.STRING, default: ""},
+	auth: {type: DataTypes.BOOLEAN, default: false},
+  }, {
+    classMethods: {
+      associate: function(models) {
+        // Using additional options like CASCADE etc for demonstration
+        // Can also simply do Task.belongsTo(models.User);
+        AdminUser.belongsTo(models.AdminGroup);
+      }
     }
-});
+  });
 
-
-
-AdminUserSchema.statics = {
-	getOneItem: function(res, targetId, callBack){
-		AdminUser.findOne({'_id': targetId}).populate('group').exec(function(err, user){
-			if(err){
-				res.end(err);
-			}
-			callBack(user);
-		})
-	}
+  return AdminUser;
 };
-
-var AdminUser = mongoose.model("AdminUser", AdminUserSchema);
-
-module.exports = AdminUser;
