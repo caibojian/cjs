@@ -29,7 +29,7 @@
 					<div class="am-form am-form-group tpl-table-list-select">
 						<select data-am-selected="{btnSize: 'sm'}">
 						<option >请选择用户组</option>
-						  <option value="{{_group._id}}" ng-repeat="_group in groups">{{_group.name}}</option>
+						  <option value="{{_group.id}}" ng-repeat="_group in groups">{{_group.name}}</option>
 						</select>
 					</div>
 				</div>
@@ -65,10 +65,10 @@
 								<td>{{user.createdAt}}</td>
 								<td>
 									<div class="tpl-table-black-operation">
-										<a href="#addNewAdminUser" data-whatever="{{user._id}}" data-am-modal="{target: '#addNewAdminUser', dimmer:0,closeViaDimmer: 0, width: 800}">
+										<a href="#addNewAdminUser" data-whatever="{{user.id}}" data-am-modal="{target: '#addNewAdminUser', dimmer:0,closeViaDimmer: 0, width: 800}">
 											<i class="am-icon-pencil"></i> 编辑
 										</a>
-										<a href="javascript:;" class="tpl-table-black-operation-del" ng-click="delOneItem(user._id)">
+										<a href="javascript:;" class="tpl-table-black-operation-del" ng-click="delOneItem(user.id)">
 											<i class="am-icon-trash"></i> 删除
 										</a>
 									</div>
@@ -108,7 +108,7 @@
                         <label for="user-phone" class="am-u-sm-3 am-form-label">用户组<span class="tpl-form-line-small-title"></span></label>
                         <div class="am-u-sm-9">
                             <select data-am-selected-group="{btnSize: 'sm'}" ng-model="formData.group">
-							  <option value="{{_group._id}}" ng-repeat="_group in groups">{{_group.name}}</option>
+							  <option value="{{_group.id}}" ng-repeat="_group in groups">{{_group.name}}</option>
 							</select>
                         </div>
 

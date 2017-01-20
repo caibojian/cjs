@@ -54,14 +54,14 @@
 							<tr class="gradeX" ng-repeat="group in data">
 								<td>{{group.name}}</td>
 								<td>{{group.power| limitTo : 80}}</td>
-								<td>{{group.date}}</td>
+								<td>{{group.createdAt}}</td>
 								<td>{{group.comments}}</td>
 								<td>
 									<div class="tpl-table-black-operation">
-										<a href="#addNewAdminGroup" data-whatever="{{group._id}}" data-am-modal="{target: '#addNewAdminGroup', dimmer:0,closeViaDimmer: 0, width: 800}">
+										<a href="#addNewAdminGroup" data-whatever="{{group.id}}" data-am-modal="{target: '#addNewAdminGroup', dimmer:0,closeViaDimmer: 0, width: 800}">
 											<i class="am-icon-pencil"></i> 编辑
 										</a>
-										<a href="javascript:;" class="tpl-table-black-operation-del" ng-click="delOneItem(group._id)">
+										<a href="javascript:;" class="tpl-table-black-operation-del" ng-click="delOneItem(group.id)">
 											<i class="am-icon-trash"></i> 删除
 										</a>
 									</div>

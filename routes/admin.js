@@ -77,7 +77,7 @@ router.post('/manage/:defaultUrl/modify',function(req,res,next){
     var params = url.parse(req.url,true);
     var targetId = params.query.uid;
     if(adminBean.checkAdminPower(req,currentPage + '_modify')){
-        if(shortid.isValid(targetId)){
+        if(targetId){
             next();
         }else{
             res.end(settings.system_illegal_param);
@@ -93,7 +93,7 @@ router.get('/manage/:defaultUrl/del',function(req,res,next){
     var params = url.parse(req.url,true);
     var targetId = params.query.uid;
     if(adminBean.checkAdminPower(req,currentPage + '_del')){
-        if(shortid.isValid(targetId)){
+        if(targetId){
             next();
         }else{
             res.end(settings.system_illegal_param);
@@ -110,7 +110,7 @@ router.get('/manage/:defaultUrl/item',function(req,res,next){
     var params = url.parse(req.url,true);
     var targetId = params.query.uid;
     if(adminBean.checkAdminPower(req,currentPage + '_view')){
-        if(shortid.isValid(targetId)){
+        if(targetId){
             next();
         }else{
             res.end(settings.system_illegal_param);

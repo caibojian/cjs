@@ -10,11 +10,14 @@ var settings = require("../settings");
 var validator = require('validator');
 //对象管理
 var adminBean = require('./adminBean');
-//数据操作
-var models = require('../models');
 //密码加密
 var pass = require('../utils/pass');
-
+//用户数据操作
+var AdminUserDBopt = require('../dbopt/AdminUserDBopt');
+//用户数据操作
+var AdminGroupDBopt = require('../dbopt/AdminGroupDBopt');
+//数据操作
+var models = require('../models');
 /*跳转到到登录页面*/
 router.get("/login", function(req, res, net){
 	res.render('admin/login');
@@ -53,8 +56,6 @@ router.post('/doLogin', function(req, res){
             }).then(function(result){
                 if(result){
                    pass.hash(password, result.salt, function(err, hash){
-                        console.log(result.password);
-                        console.log(hash);
                         if(result.password == hash){
                             req.session.adminlogined = true;
                             req.session.adminUserInfo = result;
@@ -90,13 +91,13 @@ router.get('/manage/:defaultUrl/item',function(req,res){
     var params = url.parse(req.url,true);
     var targetId = params.query.uid;
 
-    if(targetObj == AdminUser){
+    if(targetObj == "AdminUser"){
         AdminUser.getOneItem(res,targetId,function(user){
             user.password = "";
             return res.json(user);
         });
-    }else{
-        DBOpt.findOne(targetObj,req, res,"find one obj success");
+    }else if(targetObj == "AdminGroup"){
+        AdminGroupDBopt.findOne(req, res);
     }
 
 });
@@ -108,43 +109,11 @@ router.get('/manage/:defaultUrl/item',function(req,res){
 
 router.get('/manage/getDocumentList/:defaultUrl',function(req,res){
     var targetObj = adminBean.getTargetObj(req.params.defaultUrl);
-    var params = url.parse(req.url,true);
-    console.log(params);
-    var keywords = params.query.searchKey;
-    var area = params.query.area;
-    var keyPr = [];
-
-    var params = url.parse(req.url,true);
-    var startNum = (params.query.currentPage - 1)*params.query.limit + 1;
-    var currentPage = Number(params.query.currentPage);
-    var limit = Number(params.query.limit);
-    var pageInfo;
-
-//    根据条件查询记录(如果有条件传递，则按条件查询)
-    
     if(targetObj == "AdminUser"){
-        models.AdminUser.findAndCountAll({
-            'include': [models.AdminGroup],
-            'attributes': ['id', 'name', 'userName', 'email', 'phoneNum', 'comments', 'createtime', 'photo', 'auth', 'createdAt', 'updatedAt', 'AdminGroupId'],
-            limit: startNum + limit -1,
-            offset: startNum -1
-        }).then(function(result){
-            pageInfo = {
-                    "totalItems" : result.count,
-                    "currentPage" : currentPage,
-                    "limit" : limit,
-                    "startNum" : Number(startNum)
-                };
-
-            return res.json({
-                docs : result.rows,
-                pageInfo : pageInfo
-            });
-        })
-    }else{
-
+        AdminUserDBopt.findUserByPages(req, res);
+    }else if(targetObj == "AdminGroup"){
+        AdminGroupDBopt.findGroupByPages(req, res);
     }
-
 });
 
 
@@ -156,23 +125,19 @@ router.get('/manage/:defaultUrl/del',function(req,res){
     var currentPage = req.params.defaultUrl;
     var params = url.parse(req.url,true);
     var targetObj = adminBean.getTargetObj(currentPage);
-
-    if(targetObj == AdminUser){
-        if(params.query.uid == req.session.adminUserInfo._id){
+    if(targetObj == "AdminUser"){
+        if(params.query.uid == req.session.adminUserInfo.id){
             res.end('不能删除当前登录的管理员！');
         }else{
-            DBOpt.del(targetObj,req,res,"del one obj success");
+            AdminUserDBopt.del(targetObj,req,res,"del one obj success");
         }
-    }else if(targetObj == AdminGroup){
-        // if(params.query.uid == req.session.adminUserInfo.group._id){
-        //     res.end('当前用户拥有的权限信息不能删除！');
-        // }else{
-            DBOpt.del(targetObj,req,res,"del one obj success");
-        // }
-    }else{
-        DBOpt.del(targetObj,req,res,"del one obj success");
+    }else if(targetObj == "AdminGroup"){
+        if(params.query.uid == req.session.adminUserInfo.AdminGroup.id){
+            res.end('当前用户拥有的权限信息不能删除！');
+        }else{
+            AdminGroupDBopt.del(req,res);
+        }
     }
-
 });
 
 //批量删除对象
@@ -221,16 +186,16 @@ router.post('/manage/:defaultUrl/modify',function(req,res){
     var targetObj = adminBean.getTargetObj(currentPage);
     var params = url.parse(req.url,true);
 
-    if(targetObj == AdminUser){
+    if(targetObj == "AdminUser"){
         // req.body.password = DbOpt.encrypt(req.body.password,settings.encrypt_key);
         pass.hash(req.body.password, function(err, salt, hash){
             req.body.password = hash;
             req.body.salt = salt;
-            DBOpt.updateOneByID(targetObj,req, res,"update one obj success")
         });
         
+    }else if(targetObj == "AdminGroup"){
+        AdminGroupDBopt.updateById(req, res);
     }
-    DBOpt.updateOneByID(targetObj,req, res,"update one obj success")
 });
 //-------------------------更新单条记录(执行更新)结束--------------------
 
@@ -238,8 +203,12 @@ router.post('/manage/:defaultUrl/modify',function(req,res){
 router.get('/manage/:defaultUrl/findAll',function(req,res){
     var currentPage = req.params.defaultUrl;
     var targetObj = adminBean.getTargetObj(currentPage);
-    var params = url.parse(req.url,true);
-    DBOpt.findAll(targetObj,req, res,"findAll one obj success")
+
+    if(targetObj == "AdminUser"){
+
+    }else if(targetObj == "AdminGroup"){
+        AdminGroupDBopt.findGroupAll(req, res);
+    }
 });
 //-------------------------获取所有数据结束--------------------
 //-------------------------对象新增开始-------------------------
@@ -248,12 +217,12 @@ router.post('/manage/:defaultUrl/addOne',function(req,res){
     var currentPage = req.params.defaultUrl;
     var targetObj = adminBean.getTargetObj(currentPage);
 
-    if(targetObj == AdminUser){
+    if(targetObj == 'AdminUser'){
         addOneAdminUser(req,res);
-    }else{
-        DBOpt.addOne(targetObj,req, res);
+    }else if(targetObj == 'AdminGroup'){
+         AdminGroupDBopt.addOne(req, res);
+        // DBOpt.addOne(targetObj,req, res);
     }
-
 });
 
 //-------------------------对象新增结束-------------------------
