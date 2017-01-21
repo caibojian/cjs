@@ -92,10 +92,7 @@ router.get('/manage/:defaultUrl/item',function(req,res){
     var targetId = params.query.uid;
 
     if(targetObj == "AdminUser"){
-        AdminUser.getOneItem(res,targetId,function(user){
-            user.password = "";
-            return res.json(user);
-        });
+        AdminUserDBopt.findOne(req, res);
     }else if(targetObj == "AdminGroup"){
         AdminGroupDBopt.findOne(req, res);
     }
@@ -129,7 +126,7 @@ router.get('/manage/:defaultUrl/del',function(req,res){
         if(params.query.uid == req.session.adminUserInfo.id){
             res.end('不能删除当前登录的管理员！');
         }else{
-            AdminUserDBopt.del(targetObj,req,res,"del one obj success");
+            AdminUserDBopt.del(req,res);
         }
     }else if(targetObj == "AdminGroup"){
         if(params.query.uid == req.session.adminUserInfo.AdminGroup.id){
@@ -187,10 +184,11 @@ router.post('/manage/:defaultUrl/modify',function(req,res){
     var params = url.parse(req.url,true);
 
     if(targetObj == "AdminUser"){
-        // req.body.password = DbOpt.encrypt(req.body.password,settings.encrypt_key);
+        //密码加密
         pass.hash(req.body.password, function(err, salt, hash){
             req.body.password = hash;
             req.body.salt = salt;
+            AdminUserDBopt.updateById(req, res);
         });
         
     }else if(targetObj == "AdminGroup"){
@@ -221,7 +219,6 @@ router.post('/manage/:defaultUrl/addOne',function(req,res){
         addOneAdminUser(req,res);
     }else if(targetObj == 'AdminGroup'){
          AdminGroupDBopt.addOne(req, res);
-        // DBOpt.addOne(targetObj,req, res);
     }
 });
 
@@ -232,8 +229,9 @@ function addOneAdminUser(req,res){
     var errors;
     var userName = req.body.userName;
     if(validator.isUserName(userName)){
-        AdminUser.findOne({userName:req.body.userName},function(err,user){
-            if(user){
+        AdminUserDBopt.findByAny({userName:req.body.userName},function(result){
+            console.log(result.length);
+            if(result.length > 0){
                 errors = "该用户名已存在！";
                 res.end(errors);
             }else{
@@ -244,12 +242,10 @@ function addOneAdminUser(req,res){
                     res.end(errors)
                 }else{
                     // 密码加密
-                    //req.body.password = DbOpt.encrypt(req.body.password,settings.encrypt_key);
-                    //req.body.group = new AdminGroup({_id : req.body.group});
                     pass.hash(req.body.password, function(err, salt, hash){
                         req.body.password = hash;
                         req.body.salt = salt;
-                        DBOpt.addOne(AdminUser,req, res);
+                        AdminUserDBopt.addOne(req, res);
                     });
                 }
             }

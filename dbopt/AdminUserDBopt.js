@@ -17,7 +17,7 @@ var AdminUserDBopt = {
         var pageInfo;
          models.AdminUser.findAndCountAll({
             'include': [models.AdminGroup],
-            'attributes': ['id', 'name', 'userName', 'email', 'phoneNum', 'comments', 'createtime', 'photo', 'auth', 'createdAt', 'updatedAt', 'AdminGroupId'],
+            'attributes': ['id', 'name', 'userName', 'email', 'phoneNum', 'comments', 'photo', 'auth', 'createdAt', 'updatedAt', 'AdminGroupId'],
             limit: startNum + limit -1,
             offset: startNum -1
         }).then(function(result){
@@ -33,7 +33,50 @@ var AdminUserDBopt = {
             });
         })
     },
+    //添加一个用户组
+    addOne: function(req, res){
+        models.AdminUser.create(req.body).then(function(){
+            res.end('success');
+        })
+    },
+    //根据条件查询
+    findByAny: function(condition, callBack){
+        models.AdminUser.findAll({ where: condition }).then(function(projects){
+            callBack(projects)
+        });
+    },
+    //删除一个用户
+    del: function(req, res){
+        var params = url.parse(req.url,true);
+        models.AdminUser.destroy({
+            where:{id : params.query.uid}
+        }).then(function(){
+            res.end('success');
+        })
+    },
+    //更新一个用户
+    updateById: function(req, res){
+        var params = url.parse(req.url,true);
+        var targetId = params.query.uid;
+        models.AdminUser.update(
+            req.body,{
+            where:{
+                id:targetId
+            }
+        }).then(function(){
+            res.end('success');
+        });
+    },
+     //查询一个用户
+    findOne: function(req, res){
+        var params = url.parse(req.url,true);
+        models.AdminUser.findOne({
+            where:{id : params.query.uid},
+            attributes: ['id', 'name', 'userName', 'email', 'phoneNum', 'createdAt', 'updatedAt', 'AdminGroupId'],
+        }).then(function(result){
+            res.json(result);
+        })
+    },
 }
-
 
 module.exports = AdminUserDBopt;

@@ -12,9 +12,8 @@ module.exports = function(sequelize, DataTypes) {
 	phoneNum: DataTypes.STRING,
 	salt: DataTypes.STRING,
 	comments: DataTypes.STRING,
-	createtime: {type: DataTypes.DATE, default: Date.now},
 	photo: {type: DataTypes.STRING, default: ""},
-	auth: {type: DataTypes.BOOLEAN, default: false},
+	auth: {type: DataTypes.BOOLEAN, default: ""},
   }, {
     classMethods: {
       associate: function(models) {

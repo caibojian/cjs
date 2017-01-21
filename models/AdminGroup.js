@@ -9,7 +9,6 @@ module.exports = function(sequelize, DataTypes) {
   var AdminGroup = sequelize.define("AdminGroup", {
     name:  DataTypes.STRING,
     power : DataTypes.TEXT,
-    date: { type: DataTypes.DATE, default: Date.now },
     comments : DataTypes.STRING
   }, {
     classMethods: {

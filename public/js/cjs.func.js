@@ -162,7 +162,7 @@ function initDelOption($scope,$http,info){
     // 单条记录删除
     $scope.delOneItem = function(id){
         initCheckIfDo($scope,id,info,function(currentID){
-            angularHttpGet($http,"/admin/manage/"+$('#currentCate').val()+"/del?uid="+id,function(){
+            angularHttpGet($http,"/admin/manage/"+$('#currentCate').val()+"/del?uid="+$scope.targetID,function(){
                 initPagination($scope,$http);
             });
         });

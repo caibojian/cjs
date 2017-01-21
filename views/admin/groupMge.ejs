@@ -43,6 +43,7 @@
 					<table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " id="example-r">
 						<thead>
 							<tr>
+								<th>ID</th>
 								<th>用户组名称</th>
 								<th>权限</th>
 								<th>创建时间</th>
@@ -52,6 +53,7 @@
 						</thead>
 						<tbody>
 							<tr class="gradeX" ng-repeat="group in data">
+								<td>{{group.id}}</td>
 								<td>{{group.name}}</td>
 								<td>{{group.power| limitTo : 80}}</td>
 								<td>{{group.createdAt}}</td>
