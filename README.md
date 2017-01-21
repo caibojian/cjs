@@ -36,7 +36,7 @@
 目前应用的核心模块如下：
 - 核心框架：node.js + express
 - 安全框架：自己写的权限管理功能
-- 持久层框架：mongodb
+- 持久层框架（ORM）：Sequelize 
 - 缓存框架：Redis（暂未完成）
 - 会话管理：express-session
 - 日志管理：Log4js
